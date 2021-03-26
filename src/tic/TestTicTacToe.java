@@ -22,9 +22,9 @@ private Main _testMain;
 		String[] boardTest1= {"X", "O", "O", "O", "O", "X", "X", "X", "X"};
 		String[] boardTest2= {"X", "O", "X", "X", "O", "X", "X", "O", "X"};
 		String[] emptyBoard= {" ", " ", " ", " ", " ", " ", " ", " ", " "};
-		assertEquals(_testMain.printTicTacToeBoard(boardTest1),"|-----------|\n| X | O | O |\n|-----------|\n| O | O | X |\n|-----------|\n| X | X | X |\n|-----------|\n");
-		assertEquals(_testMain.printTicTacToeBoard(boardTest2),"|-----------|\n| X | O | X |\n|-----------|\n| X | O | X |\n|-----------|\n| X | O | X |\n|-----------|\n");
-		assertEquals(_testMain.printTicTacToeBoard(emptyBoard),"|-----------|\n|   |   |   |\n|-----------|\n|   |   |   |\n|-----------|\n|   |   |   |\n|-----------|\n");
+		assertEquals(_testMain.prepareTicTacToeBoard(boardTest1),"|-----------|\n| X | O | O |\n|-----------|\n| O | O | X |\n|-----------|\n| X | X | X |\n|-----------|\n");
+		assertEquals(_testMain.prepareTicTacToeBoard(boardTest2),"|-----------|\n| X | O | X |\n|-----------|\n| X | O | X |\n|-----------|\n| X | O | X |\n|-----------|\n");
+		assertEquals(_testMain.prepareTicTacToeBoard(emptyBoard),"|-----------|\n|   |   |   |\n|-----------|\n|   |   |   |\n|-----------|\n|   |   |   |\n|-----------|\n");
 
 
 	}
