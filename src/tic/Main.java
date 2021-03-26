@@ -1,7 +1,11 @@
 package tic;
 
+import java.util.Random;
+
 public class Main {
-	
+	static int maxNum=9;	
+	static Random rand = new Random();
+	static String[] giveMeXorO = { "X", "O" };
 	// CheckWinner method will
 	// decide the combination
 	// of three box given below.
@@ -100,7 +104,42 @@ public class Main {
 		sb.append(line);
 		return sb.toString();
 	}
+	public static boolean checkArrayIsFull(String[] array) {  //If array is not full then bot can assign value
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] == null) {
+				return false;
+			}
+		}
+		return true;
+		}
 	public static void main(String[] args) {
+		String[] board = new String[maxNum];
 		
+		String winner = null;
+		while (winner == null) {
+
+			for (int moveNum = 0; moveNum < maxNum; moveNum++) {
+				
+				int n = rand.nextInt(maxNum);
+				while (board[n] != null && !checkArrayIsFull(board)) {
+					n = rand.nextInt(maxNum);
+				}
+				board[n] = giveMeXorO[moveNum % 2];
+
+				if (moveNum >= 5) {//before 5 moves it is impossible to win, so not checking the winner
+					winner = checkGameWinner(board);
+					if (winner != null)
+						break;
+				}
+			}
+			System.out.println(prepareTicTacToeBoard(board));
+			if (winner == null) { //no winner
+				System.out.println("\n It's a draw!\n");
+			}
+
+		}
+
+		System.out.println("\n " + winner);
+
 	}
 }

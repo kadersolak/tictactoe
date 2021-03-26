@@ -36,3 +36,9 @@
  		- in loop will split it to 3 to have lines
  		- if the value is null it means nothing in the cell so be empty
  		- needs to have lines and seperatorsfor better look
+ 		
+ 	- Make Bot moves
+ 		- moves needs to be random
+ 		- only empty cells can be played.
+ 		- after 5 th move can be a winner
+ 		- cell can be 9, string array
