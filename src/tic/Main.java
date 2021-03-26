@@ -3,12 +3,25 @@ package tic;
 import java.util.Random;
 
 public class Main {
-	static int maxNum=9;	
 	static Random rand = new Random();
 	static String[] giveMeXorO = { "X", "O" };
+	static int maxNum=9;	
+	
+	static String checkResult(String line, String type) {
+		// For X winner
+		if (line.equals("XXX")) {
+			return "Player X won with a "+ type+" line!";
+		}
+
+		// For O winner
+		if (line.equals("OOO")) {
+			return "Player O won with a "+ type+" line!";
+		}
+		return null;
+	}
+	
 	// CheckWinner method will
-	// decide the combination
-	// of three box given below.
+	// decide the combination of three box given below.
 	static String checkGameWinner(String[] board) {
 		String returnVal=null;
 		String returnValMessage=null;
@@ -18,59 +31,63 @@ public class Main {
 			switch (a) {
 			case 0:
 				line = board[0] + board[1] + board[2];
-				returnVal= "horizontal";
+				returnVal=checkResult(line, "horizontal");
 				break;
 			case 1:
 				line = board[3] + board[4] + board[5];
-				returnVal= "horizontal";
+				returnVal=checkResult(line, "horizontal");
 				break;
 			case 2:
 				line = board[6] + board[7] + board[8];
-				returnVal= "horizontal";
+				returnVal=checkResult(line, "horizontal");
 				break;
 			case 3:
 				line = board[0] + board[3] + board[6];
-				returnVal= "vertical";
+				returnVal=checkResult(line, "vertical");
 				break;
 			case 4:
 				line = board[1] + board[4] + board[7];
-				returnVal= "vertical";
+				returnVal=checkResult(line, "vertical");
 				break;
 			case 5:
 				line = board[2] + board[5] + board[8];
-				returnVal= "vertical";
+				returnVal=checkResult(line, "vertical");
 				break;
 			case 6:
 				line = board[0] + board[4] + board[8];
-				returnVal= "diagonal";
+				returnVal=checkResult(line, "diagonal");
 				break;
 			case 7:
 				line = board[2] + board[4] + board[6];
-				returnVal= "diagonal";
+				returnVal=checkResult(line, "diagonal");
 				break;
 			}
 			
-			
-			if (line.equals("XXX")) {
-				if(returnValMessage!=null) return returnValMessage="Something is terribly wrong!"; 
-				returnValMessage= "Player X won with a "+ returnVal+" line!";
+			if(returnVal!=null) {
+				if(returnValMessage!=null) return returnValMessage="Something is terribly wrong!"; //There is 2 winners
+				
+				returnValMessage=returnVal;
 			}
-
-			// For O winner
-			if (line.equals("OOO")) {
-				if(returnValMessage!=null) return returnValMessage="Something is terribly wrong!"; 
-				returnValMessage= "Player O won with a "+ returnVal+" line!";
-			}
-
 		}
 		return returnValMessage;
 	}
 	
-	static String changeNullToSpace(String value) { //To print null places in board as space
-		if (value == null) return " ";
-		else return value;
+	static String changeNullToSpace(String cellValue) { //Nulls in board needs to change to space, for better look
+		if (cellValue == null) return " ";
+		else return cellValue;
 	}
-	
+
+	// To print out the board.
+	/*
+	 * |-----------| 
+	 * | 1 | 2 | 3 | 
+	 * |-----------| 
+	 * | 4 | 5 | 6 | 
+	 * |-----------|
+	 * | 7 | 8 | 9 |
+	 * |-----------|
+	 */
+
 	static String prepareTicTacToeBoard(String[] board) {
 
 		String line = "|-----------|\n";
@@ -82,8 +99,8 @@ public class Main {
 		for (int i = 0; i < board.length; i++) {
 			orderInBoard = i % 3;
 			switch (orderInBoard) {
-				case 0: {
-					sb.append(line);
+				case 0: {	
+					sb.append(line); // line between rows
 					sb.append(delimiterStart);
 					sb.append(changeNullToSpace(board[i]));
 					break;
@@ -101,39 +118,45 @@ public class Main {
 				}
 			}
 		}
-		sb.append(line);
+		sb.append(line); //end line
 		return sb.toString();
 	}
-	public static boolean checkArrayIsFull(String[] array) {  //If array is not full then bot can assign value
+
+	public static boolean checkArrayIsFull(String[] array) { //If array is not fuill then bot can continue to make moves
 		for (int i = 0; i < array.length; i++) {
 			if (array[i] == null) {
 				return false;
 			}
 		}
 		return true;
+	}
+	static String[] makeAMove(String[] board, int moveNum) { //random move according to empty spaces
+		int n = rand.nextInt(maxNum);
+		while (board[n] != null && !checkArrayIsFull(board)) { //if cell is already occupied and there is empty cell boat can make a move
+			n = rand.nextInt(maxNum); //get again random num to check if the cell is empty
 		}
+		board[n] = giveMeXorO[moveNum % 2]; //pick the next value, according to mod it will come in order
+		
+		return board;
+	}
 	public static void main(String[] args) {
 		String[] board = new String[maxNum];
 		
 		String winner = null;
-		while (winner == null) {
+		while (winner == null) { //till we have a winner will make moves
 
-			for (int moveNum = 0; moveNum < maxNum; moveNum++) {
+			for (int moveNum = 0; moveNum < maxNum; moveNum++) { //for every game 9 moves
 				
-				int n = rand.nextInt(maxNum);
-				while (board[n] != null && !checkArrayIsFull(board)) {
-					n = rand.nextInt(maxNum);
-				}
-				board[n] = giveMeXorO[moveNum % 2];
+				board=makeAMove(board, moveNum); // after every move it return board
 
 				if (moveNum >= 5) {//before 5 moves it is impossible to win, so not checking the winner
-					winner = checkGameWinner(board);
-					if (winner != null)
+					winner = checkGameWinner(board); // check if we have a winner
+					if (winner != null) // we have a winner so it will show the board
 						break;
 				}
 			}
-			System.out.println(prepareTicTacToeBoard(board));
-			if (winner == null) { //no winner
+			System.out.println(prepareTicTacToeBoard(board)); // print the board to see the game
+			if (winner == null) { //no winner 
 				System.out.println("\n It's a draw!\n");
 			}
 
